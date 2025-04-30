@@ -139,3 +139,171 @@ Comprueba que `A | B` se convierte en `A & B`.
 Crea  
 ```ts
 function base<T extends object[]>(config: { relleno: [...T] }): void;
+y llama con [ { x: number }, { y: string } ].
+```
+
+---
+
+### 14. Exigir propiedades inyectadas
+📚 **Qué aprendes:** Combinar un relleno con propiedades adicionales exigidas.
+
+🎯 **Reto:**
+Extiende `base` para exigir todas las props de la intersección de tipos en `relleno`.
+Debe fallar si falta alguna propiedad.
+
+---
+
+### 15. Inferencia automática de tipos
+📚 **Qué aprendes:** Hacer que TypeScript infiera todo solo.
+
+🎯 **Reto:**
+Llama a `base({ relleno: [...] as const, x: ..., y: ... })` sin anotar tipos explícitos.
+Confirma que TS entiende todo.
+
+---
+
+### 16. Múltiples inyecciones
+📚 **Qué aprendes:** Componer varios tipos inyectados.
+
+🎯 **Reto:**
+Crea interfaces `A`, `B`, `C` y llama a `base` con sus instancias.
+Debe pedir todas las props.
+
+---
+
+### 17. Tipo de retorno enriquecido
+📚 **Qué aprendes:** Retornar un objeto tipado basado en tipos inyectados.
+
+🎯 **Reto:**
+Haz que `base` devuelva un objeto con todas las propiedades inferidas y tipadas.
+
+---
+
+### 18. Plugins tipados
+📚 **Qué aprendes:** Inyectar tipos opcionales (como `__config`) en plugins.
+
+🎯 **Reto:**
+Simula `VectyPlugin<Config>` con un `applyPlugin` que devuelva el tipo de `__config`.
+
+---
+
+### 19. Validación condicional de tipos
+📚 **Qué aprendes:** Aplicar restricciones personalizadas sobre los tipos inyectados.
+
+🎯 **Reto:**
+Haz que `relleno` solo permita objetos que tengan un `name: string`.
+
+---
+
+### 20. Factory de Componentes Genéricos
+📚 **Qué aprendes:** Inyectar propiedades dinámicamente en componentes.
+
+🎯 **Reto:**
+Crea `createComponent<Inj extends object[]>(config: { relleno: [...Inj] })` que devuelva un componente que requiera todas las props.
+
+---
+
+## 💼 Manos a la obra (Nivel intermedio – hasta ejercicio 10)
+
+---
+
+### 1) Tipar respuestas de un formulario dinámico
+
+A) En una empresa se encontró este patrón al procesar formularios con campos dinámicos:
+
+```ts
+function getFormValue(field: string): any {
+  // ...
+}
+```
+
+¿Cómo podrían usar TypeScript para recibir siempre el tipo correcto del campo, por ejemplo `"email"` devuelve `string`, `"age"` devuelve `number`?
+
+---
+
+### 2) Serializar objetos con solo ciertas claves
+
+A) Un equipo necesita una función `serialize(obj, keys)` que devuelva solo algunas claves de un objeto como string JSON.
+
+```ts
+serialize({ a: 1, b: 2, c: 3 }, ["a", "c"]) // '{"a":1,"c":3}'
+```
+
+¿Cómo podrías usar `keyof` y genéricos para que `keys` solo puedan ser claves reales del objeto?
+
+---
+
+### 3) Auto tipado de respuestas API
+
+A) El backend devuelve una respuesta `status: 'ok' | 'error'`, con contenido distinto según el caso.
+
+```ts
+type APIResponse =
+  | { status: 'ok'; data: string[] }
+  | { status: 'error'; error: string };
+```
+
+¿Cómo podrías crear una función `handleResponse<T>()` que entienda automáticamente qué propiedades puede usar según `status`?
+
+---
+
+### 4) Mapeo de tipos para inputs HTML
+
+A) Estás generando componentes de formulario automáticamente, pero cada tipo de `input` espera un tipo diferente.
+
+```ts
+type InputType = "text" | "number" | "date";
+
+getDefaultValue("text") → ""
+getDefaultValue("number") → 0
+```
+
+¿Cómo podrías usar `extends` o `conditional types` para que `getDefaultValue<T>()` devuelva el tipo adecuado?
+
+---
+
+### 5) Validar campos con constraints
+
+A) Tenés una función para validar que un objeto tenga cierta estructura.
+
+```ts
+validateFields({ name: "Alex", age: 30 });
+```
+
+¿Cómo podrías forzar que el tipo de argumento tenga al menos un `name: string` usando `extends`?
+
+---
+
+### 6) Interfaz dinámica para configuración
+
+A) Cada módulo puede tener distinta configuración:
+
+```ts
+type Config = { theme: string } | { debug: boolean };
+```
+
+Querés una función `loadConfig<T>()` que devuelva la config esperada según el módulo. ¿Cómo podrías inferir eso con genéricos y `infer`?
+
+---
+
+### 7) Transformar lista en union
+
+A) Estás creando una función que recibe una lista de nombres de features habilitadas:
+
+```ts
+enableFeatures(["auth", "analytics"])
+```
+
+¿Cómo harías para que esos valores estén restringidos a un tipo `"auth" | "analytics" | "payments"` y que TypeScript lo entienda?
+
+---
+
+### 8) Tipar funciones de acceso a propiedades
+
+A) Usás una función `getValue(obj, key)` para obtener propiedades dinámicamente.
+
+```ts
+getValue({ name: "Alex", age: 30 }, "age") → 30
+```
+
+¿Cómo usarías `keyof` y genéricos para que `key` sólo pueda ser una clave válida y el retorno tenga el tipo correcto?
