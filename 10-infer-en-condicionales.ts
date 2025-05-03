@@ -26,3 +26,8 @@ function mapToIds<T extends { id: number }>(list: T[]): T['id'][] {
   return list.map((item: Item) => item.id);
 }
 mapToIds([{id: 2}, {id: 32}]) // 💻 [2, 32]
+
+// 3) Capturar parámetros de funciones
+type FunctionParams<T> = T extends (...args: infer P) => any ? P : never
+type Example = (a: string, b: number) => void;
+type Params = FunctionParams<Example>; // 💻 [string, number]
