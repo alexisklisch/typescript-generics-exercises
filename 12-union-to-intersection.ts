@@ -35,3 +35,5 @@ const cfg: Config = {
   onDestroy: () => console.log('Destruido'),
   onInit: () => console.log('Iniciado')
 }
+
+export {}
